@@ -6,14 +6,13 @@ import VotingAbi from './contracts/Voting.json'
 
 function App() {
 
+  const [currentAccount, setAccount] = useState("");
   useEffect(() => {
 		loadWeb3();
     loadBlockchainData();
 	}, []);
 
-  //function to interact with web3
   const loadWeb3 = async () => {
-	// Modern dapp browsers...
 	if (window.ethereum) {
 		window.web3 = new Web3(window.ethereum);
 		try {
@@ -22,11 +21,9 @@ function App() {
 			console.log("Error:", error);
 		}
 	}
-	// Legacy dapp browsers...
 	else if (window.web3) {
 		window.web3 = new Web3(window.web3.currentProvider);
 	}
-	// Non-dapp browsers...
 	else {
 		window.alert(
 			"ATTENTION!\nApplication will not load. Non-Ethereum browser detected. You should consider trying MetaMask!"
@@ -36,11 +33,11 @@ function App() {
 	return 1;
 };
 
-
   const loadBlockchainData = async () => {
 		const web3 = window.web3;
 		const _accounts = await web3.eth.getAccounts();
 		const account = _accounts[0];
+		setAccount(account);
 		const _networkId = await web3.eth.net.getId();
     const networkData = VotingAbi.networks[_networkId];
     if(networkData){
@@ -56,7 +53,7 @@ function App() {
     <div className="App">
      <nav className="navbar bg-light">
   <div className="container-fluid">
-    <a className="navbar-brand" href="#">VOTING DAPP</a>
+    <a className="navbar-brand" href="#">Your account address : {currentAccount}</a>
   </div>
 </nav>
     </div>
