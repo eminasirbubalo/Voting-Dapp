@@ -13,6 +13,7 @@ function App() {
 
   const [currentAccount, setAccount] = useState("");
   const [votingContract, setVotingContract] = useState("");
+  const [winner, setWinner] = useState("");
   const [candidate1, setCandidate1] = useState("");
   const [candidate2, setCandidate2] = useState("");
   const [chosenCandidate, setchosenCandidate] = useState("");
@@ -62,6 +63,9 @@ function App() {
 	  const candidate2 = await votingContract.methods.candidates(2).call();
 	  setCandidate1(candidate1);
 	  setCandidate2(candidate2);
+	  if (candidate1.votesCount > candidate2.votesCount) setWinner(candidate1.name);
+			else if (candidate2.votesCount < candidate1.votesCount) setWinner(candidate2.name);
+			else setWinner("No one");
     }else{
       window.alert("Smart contract not deployed to this network!")
     }
@@ -78,14 +82,11 @@ function App() {
 
   return (
     <div className="App">
-     <nav className="navbar bg-light">
-  <div className="container-fluid">
-    <a className="navbar-brand" href="#">Your account address : {currentAccount}</a>
-  </div>
-</nav>
+    <h1 className="navbar-brand" style={{ fontSize: "50px" }} href="#">VOTING SITE</h1>
+    <h1 className="navbar-brand mt-3" href="#">Your account address --> {currentAccount}</h1>
 <div className="mt-4 text-center" style={{ color: "#000000" }}>
 <h2>Today we vote between: </h2>
-<div className="p-3 ml-auto mr-auto border rounded" style={{ width: "40%" }}>
+<div className="p-3 ml-auto mr-auto border rounded" style={{ width: "auto" }}>
 	<div className="row ml-auto mr-auto  mb-2" style={{ width: "90%" }}>
 		<div className="col">
 			<p>#</p>
@@ -97,7 +98,7 @@ function App() {
 			<p>Votes</p>
 		</div>
 	</div>
-	<hr style={{ width: "90%", borderStyle: "solid", borderColor: "#eebb4d" }} />
+	<hr style={{ width: "auto", borderStyle: "solid", borderColor: "#ffffff" }} />
 	<div className="row ml-auto mr-auto  mb-2" style={{ width: "90%" }}>
 		<div className="col">
 			<p>{candidate1.id}</p>
@@ -109,7 +110,7 @@ function App() {
 			<p>{candidate1.votesCount}</p>
 		</div>
 	</div>
-	<hr style={{ width: "90%", borderStyle: "solid", borderColor: "#eebb4d" }} />
+	<hr style={{ width: "auto", borderStyle: "solid", borderColor: "#ffffff" }} />
 	<div className="row ml-auto mr-auto  mb-2" style={{ width: "90%" }}>
 		<div className="col">
 			<p>{candidate2.id}</p>
@@ -122,8 +123,8 @@ function App() {
 		</div>
 	</div>
 </div>
-<div className="my-5 mr-auto ml-auto text-left" style={{ width: "70%" }}>
-	<h5>Add Your Vote:</h5>
+<div className="my-5 mr-auto ml-auto" style={{ width: "auto" }}>
+	<h5 className="mt-3">Add Your Vote:</h5>
 	<form onSubmit={onSubmit}>
 			<select name="candidate" className="form-control" onChange={onChange}>
 				<option defaultValue value="">
@@ -132,13 +133,11 @@ function App() {
 				<option value="1">{candidate1.name}</option>
 				<option value="2">{candidate2.name}</option>
 			</select>
-			<button className="btn btn-primary mt-2 btn-md w-100">Vote Candidate{""} {chosenCandidate}</button>
+			<button className="btn btn-primary mt-2 btn-md w-100">VOTE{""} {chosenCandidate}</button>
 		</form>
 </div>
-<p className="mt-3">
-	Current winner is <span className="font-weight-bold"></span>
-	<br />
-	Total people have voted
+<p className="mt-3" style={{fontSize:"24px"}}>
+	Current winner is : {""} {winner} !<span className="font-weight-bold"></span>
 </p>
 </div>
 </div>
